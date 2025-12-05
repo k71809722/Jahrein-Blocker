@@ -1,13 +1,17 @@
 {
     "manifest_version": 3,
     "name": "Jahrein Engelleyici",
-    "version": "1.0",
+    "version": "2.0",
     "description": "Belirlenen anahtar kelimeleri ve kişileri tarayıcınızda engeller.",
     "permissions": [
         "storage",
         "activeTab",
-        "scripting"
+        "scripting",
+        "contextMenus"
     ],
+    "background": {
+        "service_worker": "background.js"
+    },
     "host_permissions": [
         "<all_urls>"
     ],

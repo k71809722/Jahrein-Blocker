@@ -1,149 +1,267 @@
-:root {
-  --bg-color: #1a1a1a;
-  --text-color: #ffffff;
-  --accent-color: #e63946;
-  --secondary-bg: #2d2d2d;
-  --border-radius: 8px;
-}
-
 body {
   width: 320px;
-  background-color: var(--bg-color);
-  color: var(--text-color);
+  background-color: #121212;
+  color: #e0e0e0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
-  padding: 16px;
+  padding: 0;
+}
+
+.container {
+  padding: 20px;
 }
 
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
-h1 {
-  font-size: 18px;
+.logo-area h2 {
   margin: 0;
-  font-weight: 600;
+  font-size: 20px;
+  background: linear-gradient(45deg, #ff6b6b, #fca311);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.1;
 }
 
-.switch {
+.version {
+  font-size: 10px;
+  color: #666;
+  margin-left: 2px;
+}
+
+/* Toggle Switch */
+.toggle-switch {
   position: relative;
-  display: inline-block;
   width: 50px;
-  height: 24px;
+  height: 26px;
 }
 
-.switch input { 
+.toggle-switch input {
   opacity: 0;
   width: 0;
   height: 0;
 }
 
-.slider {
+.toggle-switch label {
   position: absolute;
   cursor: pointer;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background-color: #333;
   transition: .4s;
+  border-radius: 34px;
 }
 
-.slider:before {
+.toggle-switch label:before {
   position: absolute;
   content: "";
-  height: 16px;
-  width: 16px;
-  left: 4px;
-  bottom: 4px;
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
   background-color: white;
   transition: .4s;
-}
-
-input:checked + .slider {
-  background-color: var(--accent-color);
-}
-
-input:focus + .slider {
-  box-shadow: 0 0 1px var(--accent-color);
-}
-
-input:checked + .slider:before {
-  transform: translateX(26px);
-}
-
-.slider.round {
-  border-radius: 24px;
-}
-
-.slider.round:before {
   border-radius: 50%;
 }
 
-.status-text {
-  text-align: right;
-  font-size: 12px;
+input:checked+label {
+  background-color: #4cc9f0;
+}
+
+input:checked+label:before {
+  transform: translateX(24px);
+}
+
+.status-indicator {
+  text-align: center;
+  margin-bottom: 15px;
+  font-size: 13px;
   color: #888;
+}
+
+/* Stats Card */
+.stats-card {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: #1e1e1e;
+  padding: 15px;
+  border-radius: 12px;
   margin-bottom: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  border: 1px solid #333;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-label {
+  font-size: 11px;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: #fff;
+}
+
+#dailyCount {
+  color: #4cc9f0;
+}
+
+#totalCount {
+  color: #ff6b6b;
+}
+
+.stat-divider {
+  width: 1px;
+  height: 30px;
+  background: #333;
+}
+
+/* Mode Selector */
+.mode-selector {
+  background: #1e1e1e;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.mode-selector h3 {
+  margin: 0 0 10px 0;
+  font-size: 13px;
+  color: #aaa;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.radio-label input {
+  display: none;
+}
+
+.radio-custom {
+  width: 14px;
+  height: 14px;
+  border: 2px solid #555;
+  border-radius: 50%;
+  margin-right: 8px;
+  position: relative;
+  transition: 0.2s;
+}
+
+.radio-label input:checked+.radio-custom {
+  border-color: #4cc9f0;
+}
+
+.radio-label input:checked+.radio-custom::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  background: #4cc9f0;
+  border-radius: 50%;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  border-bottom: 2px solid #333;
+  margin-bottom: 15px;
+}
+
+.tab-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  color: #666;
+  padding: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.tab-btn.active {
+  color: #fca311;
+  border-bottom: 2px solid #fca311;
+  margin-bottom: -2px;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
 }
 
 .input-group {
   display: flex;
-  gap: 8px;
-  margin-bottom: 16px;
+  gap: 5px;
+  margin-bottom: 10px;
 }
 
-input[type="text"] {
+.input-group input {
   flex: 1;
   padding: 8px;
-  border: 1px solid #444;
-  background-color: var(--secondary-bg);
+  border-radius: 4px;
+  border: 1px solid #333;
+  background: #1e1e1e;
   color: white;
-  border-radius: var(--border-radius);
-  outline: none;
 }
 
-button#addBtn {
-  padding: 8px 16px;
-  background-color: var(--accent-color);
-  color: white;
+.input-group button {
+  padding: 8px 15px;
+  background: #4cc9f0;
   border: none;
-  border-radius: var(--border-radius);
-  cursor: pointer;
+  border-radius: 4px;
+  color: #000;
   font-weight: bold;
+  cursor: pointer;
 }
 
-button#addBtn:hover {
-  opacity: 0.9;
-}
-
-.list-container h3 {
-  font-size: 14px;
-  margin-bottom: 8px;
-  border-bottom: 1px solid #444;
-  padding-bottom: 4px;
-}
-
-ul {
-  list-style-type: none;
+.list {
+  list-style: none;
   padding: 0;
   margin: 0;
-  max-height: 200px;
+  max-height: 150px;
   overflow-y: auto;
 }
 
-li {
-  background-color: var(--secondary-bg);
-  padding: 8px;
-  margin-bottom: 6px;
-  border-radius: var(--border-radius);
+.list li {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 14px;
+  background: #1e1e1e;
+  margin-bottom: 5px;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 13px;
 }
 
 .delete-btn {
@@ -152,9 +270,22 @@ li {
   color: #ff6b6b;
   cursor: pointer;
   font-size: 16px;
-  padding: 0 4px;
+  padding: 0 5px;
 }
 
 .delete-btn:hover {
-  color: #ff4c4c;
+  color: #ff4757;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-track {
+  background: #121212;
 }

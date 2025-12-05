@@ -1,24 +1,35 @@
 // Basic Content Script to block keywords
 let blockedKeywords = [];
 let isEnabled = true;
+let blockMode = 'hide'; // 'hide' or 'blur'
 
 // Initialize
-chrome.storage.local.get(['enabled', 'keywords', 'blockedUrls'], (result) => {
+chrome.storage.local.get(['enabled', 'keywords', 'blockedUrls', 'blockMode'], (result) => {
     isEnabled = result.enabled !== undefined ? result.enabled : true;
+    blockMode = result.blockMode || 'hide';
 
     // Default Keyword List
     const defaultKeywords = [
         'jahrein',
         'ahmet sonuç',
         'jahreo',
-        'jahrein yayın'
+        'jahrein yayın',
+        'cago',
+        'jaho',
+        'jahrei̇n',
+        'jahreinin',
+        'jahreinden',
+        'cagolar',
+        'jahreinler',
+        'ahmet sonuc',
+        'jahreindota'
     ];
 
     // Default URL List
     const defaultUrls = [
         'twitter.com/jahreindota',
         'kick.com/jahrein',
-        'youtube.com/jahrein',
+        'https://www.youtube.com/@jahreinboss',
         'instagram.com/jahrein'
     ];
 
@@ -26,23 +37,124 @@ chrome.storage.local.get(['enabled', 'keywords', 'blockedUrls'], (result) => {
     const blockedUrls = result.blockedUrls || defaultUrls;
 
     if (isEnabled) {
+        injectStyles();
+
         // Check URL Blocking first
         const currentUrl = window.location.href.toLowerCase();
-        // Remove protocol for simple check (e.g. https://twitter.com -> twitter.com)
-        // Check if any blocked fragment is in the URL
+
         if (blockedUrls.some(u => currentUrl.includes(u.toLowerCase()))) {
+            window.stop();
+            const mediaElements = document.querySelectorAll('video, audio');
+            mediaElements.forEach(el => {
+                el.muted = true;
+                el.pause();
+                el.src = '';
+                el.remove();
+            });
+
+            // Modern Block Page Design
+            // Modern Block Page Design
             document.documentElement.innerHTML = `
-                <div style="display:flex;justify-content:center;align-items:center;height:100vh;background:#1a1a1a;color:#ff6b6b;font-family:sans-serif;flex-direction:column;">
-                    <h1>🛑 ERİŞİM ENGELLENDİ</h1>
-                    <p>Bu site Jahrein Engelleyici tarafından engellendi.</p>
-                </div>
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Erişim Engellendi</title>
+                    <style>
+                        body {
+                            margin: 0;
+                            padding: 0;
+                            height: 100vh;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
+                            color: #fff;
+                            font-family: 'Segoe UI', system-ui, sans-serif;
+                            overflow: hidden;
+                        }
+                        .container {
+                            text-align: center;
+                            padding: 40px;
+                            background: rgba(255, 255, 255, 0.05);
+                            border-radius: 20px;
+                            border: 1px solid rgba(255, 255, 255, 0.1);
+                            backdrop-filter: blur(10px);
+                            box-shadow: 0 0 50px rgba(255, 71, 87, 0.1);
+                            max-width: 500px;
+                            animation: fadeIn 0.8s ease-out;
+                        }
+                        .icon {
+                            font-size: 80px;
+                            margin-bottom: 20px;
+                            animation: bounce 2s infinite;
+                        }
+                        h1 {
+                            font-size: 32px;
+                            margin: 0 0 10px 0;
+                            background: linear-gradient(45deg, #ff6b6b, #ff4757);
+                            -webkit-background-clip: text;
+                            -webkit-text-fill-color: transparent;
+                        }
+                        p {
+                            color: #aaa;
+                            font-size: 16px;
+                            line-height: 1.5;
+                            margin-bottom: 30px;
+                        }
+                        .btn {
+                            background: #fff;
+                            color: #000;
+                            border: none;
+                            padding: 12px 30px;
+                            border-radius: 50px;
+                            font-size: 16px;
+                            font-weight: bold;
+                            cursor: pointer;
+                            transition: transform 0.2s, box-shadow 0.2s;
+                            text-decoration: none;
+                            display: inline-block;
+                        }
+                        .btn:hover {
+                            transform: translateY(-2px);
+                            box-shadow: 0 5px 15px rgba(255,255,255,0.2);
+                        }
+                        @keyframes fadeIn {
+                            from { opacity: 0; transform: translateY(20px); }
+                            to { opacity: 1; transform: translateY(0); }
+                        }
+                        @keyframes bounce {
+                            0%, 100% { transform: translateY(0); }
+                            50% { transform: translateY(-10px); }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <div class="icon">🛡️</div>
+                        <h1>Erişim Engellendi</h1>
+                        <p>Bu web sitesine erişim, <strong>Jahrein Engelleyici</strong> filtreleriniz nedeniyle kısıtlanmıştır.</p>
+                        <button id="jahrein-back-btn" class="btn">Geri Dön</button>
+                    </div>
+                </body>
+                </html>
             `;
-            // Stop execution
-            return;
+
+            // Attach listener programmatically to bypass CSP
+            const backBtn = document.getElementById('jahrein-back-btn');
+            if (backBtn) {
+                backBtn.addEventListener('click', () => {
+                    if (window.history.length > 1) {
+                        window.history.back();
+                    } else {
+                        window.close(); // Try closing if it's a new tab
+                    }
+                });
+            }
+
+            throw new Error("Jahrein Blocked");
         }
 
         runBlocker();
-        // Start observing for dynamic content (like infinite scrolls)
         startObserver();
     }
 });
@@ -50,11 +162,11 @@ chrome.storage.local.get(['enabled', 'keywords', 'blockedUrls'], (result) => {
 // Listen for changes in settings
 chrome.storage.onChanged.addListener((changes, namespace) => {
     if (namespace === 'local') {
-        if (changes.enabled) {
-            isEnabled = changes.enabled.newValue;
-        }
-        if (changes.keywords) {
-            blockedKeywords = changes.keywords.newValue;
+        if (changes.enabled) isEnabled = changes.enabled.newValue;
+        if (changes.keywords) blockedKeywords = changes.keywords.newValue;
+        if (changes.blockMode) {
+            blockMode = changes.blockMode.newValue;
+            runBlocker();
         }
 
         if (isEnabled) {
@@ -63,23 +175,69 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
     }
 });
 
+function injectStyles() {
+    if (document.getElementById('jahrein-blocker-style')) return;
+    const style = document.createElement('style');
+    style.id = 'jahrein-blocker-style';
+    style.textContent = `
+        .jahrein-blurred {
+            position: relative !important;
+        }
+        
+        .jahrein-blurred::after {
+            content: "🔒 Engellendi (Tıkla)";
+            position: absolute;
+            inset: 0;
+            z-index: 99999;
+            
+            /* Glass Effect */
+            background: rgba(20, 20, 20, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+            font-size: 14px;
+            font-weight: bold;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            color: #fff;
+            
+            cursor: pointer;
+            border-radius: inherit;
+            transition: all 0.2s ease;
+        }
+
+        .jahrein-blurred:hover::after {
+             background: rgba(20, 20, 20, 0.6);
+             content: "🔓 Tıkla ve Aç";
+        }
+    `;
+    document.head.appendChild(style);
+}
+
 function startObserver() {
     const observer = new MutationObserver((mutations) => {
         if (!isEnabled) return;
-
         mutations.forEach((mutation) => {
+            // Check newly added nodes
             mutation.addedNodes.forEach((node) => {
-                if (node.nodeType === 1) { // Element
+                if (node.nodeType === 1) {
                     scanAndBlock(node);
                 }
             });
+            // Also check if attributes changed on existing nodes (re-hydration)
+            if (mutation.type === 'attributes' && mutation.target.nodeType === 1) {
+                const target = mutation.target;
+                if (target.getAttribute('data-blocked-reason') === 'jahrein-blocker' && !target.classList.contains('jahrein-blurred')) {
+                    if (blockMode === 'blur') target.classList.add('jahrein-blurred');
+                }
+            }
         });
     });
 
-    observer.observe(document.body, {
-        childList: true,
-        subtree: true
-    });
+    observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
 }
 
 function runBlocker() {
@@ -89,123 +247,128 @@ function runBlocker() {
 function scanAndBlock(rootNode) {
     if (!rootNode) return;
 
-    // 1. Text Node check
-    const walker = document.createTreeWalker(
-        rootNode,
-        NodeFilter.SHOW_TEXT,
-        null,
-        false
-    );
-
+    // Scan Text
+    const walker = document.createTreeWalker(rootNode, NodeFilter.SHOW_TEXT, null, false);
     let node;
     while (node = walker.nextNode()) {
         const text = node.nodeValue.toLowerCase();
-        const matched = blockedKeywords.some(keyword => text.includes(keyword.toLowerCase()));
-        if (matched) {
+        if (blockedKeywords.some(keyword => text.includes(keyword.toLowerCase()))) {
             hideElement(node);
         }
     }
 
-    // 2. Link/Image check (Check hrefs and alt texts)
-    const elements = rootNode.querySelectorAll ? rootNode.querySelectorAll('a, img') : [];
+    // Scan Links & Images & Attributes (Expanded)
+    const elements = rootNode.querySelectorAll ? rootNode.querySelectorAll('a, img, [title], [aria-label]') : [];
     elements.forEach(el => {
         let contentToCheck = '';
         if (el.tagName === 'A') contentToCheck = el.href;
         if (el.tagName === 'IMG') contentToCheck = el.alt;
+        if (el.title) contentToCheck += ' ' + el.title;
+        if (el.getAttribute('aria-label')) contentToCheck += ' ' + el.getAttribute('aria-label');
 
-        if (contentToCheck) {
-            const matched = blockedKeywords.some(keyword => contentToCheck.toLowerCase().includes(keyword.toLowerCase()));
-            if (matched) {
-                hideElement(el);
-            }
+        if (contentToCheck && blockedKeywords.some(keyword => contentToCheck.toLowerCase().includes(keyword.toLowerCase()))) {
+            hideElement(el);
         }
     });
 }
 
 function hideElement(element) {
-    // Determine the target element to start traversing from
     let target = element.nodeType === 3 ? element.parentElement : element;
 
-    // List of selectors for common content containers
-    const stopSelectors = [
-        'article', // Generic article
-        'ytd-video-renderer',
-        'ytd-rich-item-renderer',
-        'ytd-channel-renderer',
-        'ytd-grid-video-renderer',
-        'ytd-compact-video-renderer',
-        '.tweet',
-        '.post',
-        '.video-card',
-        '.stream-card',
-        '.channel-card'
+    // TARGETS: We WANT to stop here and block this.
+    const validContainers = [
+        'ytd-video-renderer', 'ytd-rich-item-renderer', 'ytd-channel-renderer',
+        'ytd-grid-video-renderer', 'ytd-compact-video-renderer',
+        'ytd-playlist-panel-video-renderer', 'ytd-reel-item-renderer',
+        'ytd-topbar-logo-renderer', // Block logo if keyword specific (unlikely but safe)
+        'article',
+        '[data-testid="tweet"]', '[data-testid="cellInnerDiv"]'
     ];
 
-    // Safety: Do not hide these if selected as container
-    const unsafeSelectors = [
-        'body', 'html', 'main', 'section', 'header', 'footer',
-        'div[class*="grid"]', 'div[class*="list"]', 'div[class*="feed"]', 'div[class*="layout"]',
-        'ul', 'ol', 'div[id*="container"]'
+    // BARRIERS: If we hit these, we went too far. STOP and use the last safe element.
+    const layoutBarriers = [
+        'ytd-rich-grid-row', 'ytd-rich-grid-renderer', 'div#contents', 'ytd-item-section-renderer',
+        'main', 'section', 'div.feed', 'div.timeline', 'ytd-browse'
     ];
 
     let bestContainer = null;
     let current = target;
     let depth = 0;
 
-    // Remember the last safe element to fall back to if we hit an unsafe one
-    let lastSafeElement = target;
-
-    while (current && current !== document.body && depth < 8) {
+    while (current && current !== document.body && depth < 14) {
         const tagName = current.tagName.toLowerCase();
+        let isBarrier = false;
 
-        // Check safety
-        // If the current element looks like a layout wrapper, STOP and use the child.
-        if (current.className && typeof current.className === 'string') {
-            const cls = current.className.toLowerCase();
-            if (cls.includes('grid') || cls.includes('row') || (cls.includes('list') && !cls.includes('list-item')) || cls.includes('wrapper') || cls.includes('feed')) {
-                bestContainer = lastSafeElement;
-                break;
-            }
-        }
-        if (tagName === 'ul' || tagName === 'ol' || tagName === 'section' || tagName === 'main') {
-            bestContainer = lastSafeElement;
-            break;
+        // Check Barriers
+        if (layoutBarriers.includes(tagName) || (current.id === 'contents')) {
+            isBarrier = true;
         }
 
-        // Check if we found a known card
-        if (stopSelectors.includes(tagName) || tagName.startsWith('ytd-')) {
-            bestContainer = current;
-            break;
-        }
-        // Check class for card-like names
-        if (current.className && typeof current.className === 'string') {
-            const cls = current.className.toLowerCase();
-            if (cls.includes('card') || cls.includes('post') || cls.includes('tweet') || cls.includes('item') || cls.includes('entry')) {
+        // Exact Match Checks (YouTube)
+        if (tagName.startsWith('ytd-')) {
+            if (validContainers.includes(tagName)) {
                 bestContainer = current;
-                break;
+                break; // Found perfect match
+            }
+            if (tagName === 'ytd-rich-grid-row') {
+                isBarrier = true; // Typical layout containers
             }
         }
 
-        lastSafeElement = current;
+        // Twitter/Generic Checks
+        if (current.getAttribute) {
+            const testId = current.getAttribute('data-testid');
+            if (testId === 'tweet' || testId === 'cellInnerDiv') {
+                bestContainer = current;
+                break; // Found perfect match
+            }
+        }
+
+        if (current.className && typeof current.className === 'string') {
+            const cls = current.className.toLowerCase();
+            if (cls.includes('card') || cls.includes('post') || cls.includes('tweet') && !cls.includes('wrapper')) {
+                // Potential container, but keep looking for a stronger match unless we hit barrier
+                if (!bestContainer) bestContainer = current;
+            }
+        }
+
+        if (isBarrier) {
+            break;
+        }
+
         current = current.parentElement;
         depth++;
     }
 
-    // Fallback if loop finished without decision
-    if (!bestContainer) {
-        bestContainer = lastSafeElement;
-    }
+    if (!bestContainer) bestContainer = target;
 
-    // Final Safety Check
-    if (bestContainer) {
-        // If bestContainer is huge or root-like, ignore
-        if (bestContainer.tagName === 'BODY' || bestContainer.tagName === 'HTML' || bestContainer.tagName === 'MAIN') {
-            bestContainer = null;
-        }
-    }
+    // Final Safety Checks
+    if (bestContainer.tagName === 'BODY' || bestContainer.tagName === 'HTML' || bestContainer.id === 'contents') return;
 
-    if (bestContainer && bestContainer.style.display !== 'none') {
-        bestContainer.style.display = 'none';
+    // Block logic
+    const blockedStatus = bestContainer.getAttribute('data-blocked-reason');
+    const alreadyBlocked = blockedStatus === 'jahrein-blocker';
+    const isRevealed = blockedStatus === 'revealed';
+
+    if (!alreadyBlocked && !isRevealed) {
         bestContainer.setAttribute('data-blocked-reason', 'jahrein-blocker');
+        bestContainer.style.position = 'relative'; // Ensure overlay works
+
+        try { chrome.runtime.sendMessage({ action: "updateCounter", count: 1 }); } catch (e) { }
+
+        if (blockMode === 'blur') {
+            bestContainer.classList.add('jahrein-blurred');
+            bestContainer.onclick = function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (confirm("Görüntülemek istiyor musunuz?")) {
+                    this.classList.remove('jahrein-blurred');
+                    this.setAttribute('data-blocked-reason', 'revealed');
+                    this.onclick = null;
+                }
+            };
+        } else {
+            bestContainer.style.display = 'none';
+        }
     }
 }

@@ -4,41 +4,83 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Engelleyici Ayarları</title>
+  <title>Jahrein Engelleyici</title>
   <link rel="stylesheet" href="popup.css">
 </head>
 
 <body>
   <div class="container">
+
+    <!-- Header -->
     <header>
-      <h1>Jahrein Engelleyici</h1>
-      <label class="switch">
+      <div class="logo-area">
+        <h2>Jahrein<br>Engelleyici</h2>
+        <span class="version" id="versionText">v1.0</span>
+      </div>
+      <div class="toggle-switch">
         <input type="checkbox" id="toggleExtension" checked>
-        <span class="slider round"></span>
-      </label>
+        <label for="toggleExtension"></label>
+      </div>
     </header>
 
-    <div class="status-text" id="statusText">Aktif</div>
-
-    <div class="input-group">
-      <input type="text" id="newKeyword" placeholder="Kelime (örn: jahrein)">
-      <button id="addBtn">Ekle</button>
+    <!-- Stats Section (New) -->
+    <div class="stats-card">
+      <div class="stat-item">
+        <span class="stat-label">Bugün</span>
+        <span class="stat-value" id="dailyCount">0</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-label">Toplam</span>
+        <span class="stat-value" id="totalCount">0</span>
+      </div>
     </div>
 
-    <div class="list-container">
-      <h3>Engellenen Kelimeler</h3>
-      <ul id="keywordList"></ul>
+    <div class="status-indicator">
+      Durum: <span id="statusText">Aktif</span>
     </div>
 
-    <div class="input-group" style="margin-top: 20px;">
-      <input type="text" id="newUrl" placeholder="Link (örn: youtube.com/jahrein)">
-      <button id="addUrlBtn">Ekle</button>
+    <!-- Mode Selection -->
+    <div class="mode-selector">
+      <h3>Engelleme Modu</h3>
+      <div class="radio-group">
+        <label class="radio-label">
+          <input type="radio" name="blockMode" value="hide" checked>
+          <span class="radio-custom"></span>
+          Gizle (Yok Et)
+        </label>
+        <label class="radio-label">
+          <input type="radio" name="blockMode" value="blur">
+          <span class="radio-custom"></span>
+          Bulanıklaştır
+        </label>
+      </div>
     </div>
 
-    <div class="list-container">
-      <h3>Engellenen Linkler</h3>
-      <ul id="urlList"></ul>
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="keywords">Kelimeler</button>
+      <button class="tab-btn" data-tab="urls">Siteler/Linkler</button>
     </div>
+
+    <!-- Tab Content: Keywords -->
+    <div id="keywords-tab" class="tab-content active">
+      <div class="input-group">
+        <input type="text" id="newKeyword" placeholder="Kelime ekle...">
+        <button id="addBtn">+</button>
+      </div>
+      <ul id="keywordList" class="list"></ul>
+    </div>
+
+    <!-- Tab Content: URLs -->
+    <div id="urls-tab" class="tab-content">
+      <div class="input-group">
+        <input type="text" id="newUrl" placeholder="URL ekle (örn: kick.com)">
+        <button id="addUrlBtn">+</button>
+      </div>
+      <ul id="urlList" class="list"></ul>
+    </div>
+
   </div>
   <script src="popup.js"></script>
 </body>
