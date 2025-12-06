@@ -23,6 +23,7 @@ header {
   font-size: 20px;
   background: linear-gradient(45deg, #ff6b6b, #fca311);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   line-height: 1.1;
 }
@@ -288,4 +289,77 @@ input:checked+label:before {
 
 ::-webkit-scrollbar-track {
   background: #121212;
+}
+
+/* Stats Tab Styles */
+.level-container {
+  background: #252525;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #333;
+}
+
+.level-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: #fff;
+  font-weight: bold;
+}
+
+.xp-bar {
+  height: 8px;
+  background: #111;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.xp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4cc9f0, #4895ef);
+  border-radius: 4px;
+  transition: width 0.5s ease-out;
+}
+
+.badge-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.badge {
+  background: #1e1e1e;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 10px 5px;
+  text-align: center;
+  opacity: 0.4;
+  filter: grayscale(100%);
+  transition: 0.3s;
+}
+
+.badge.unlocked {
+  opacity: 1;
+  filter: grayscale(0%);
+  border-color: #fca311;
+  background: rgba(252, 163, 17, 0.1);
+  box-shadow: 0 0 10px rgba(252, 163, 17, 0.2);
+}
+
+.badge-icon {
+  font-size: 24px;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.badge-name {
+  font-size: 10px;
+  color: #aaa;
+  display: block;
+  line-height: 1.2;
+}
+
+.badge.unlocked .badge-name {
+  color: #fff;
 }

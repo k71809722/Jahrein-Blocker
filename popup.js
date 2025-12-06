@@ -65,6 +65,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (dailyCountLabel) dailyCountLabel.textContent = dailyBlocked;
         if (totalCountLabel) totalCountLabel.textContent = totalBlocked;
 
+        // Update Gamification UI
+        updateStatsUI(totalBlocked);
+
         // Set Radio
         for (const radio of modeRadios) {
             if (radio.value === blockMode) radio.checked = true;
@@ -141,6 +144,77 @@ document.addEventListener('DOMContentLoaded', () => {
         statusText.textContent = enabled ? 'Aktif' : 'Devre Dışı';
         statusText.style.color = enabled ? '#4cc9f0' : '#888';
     }
+
+    // --- Gamification Logic ---
+    function calculateLevel(totalBlocked) {
+        // Level formula: level = floor(sqrt(totalBlocked / 10)) + 1
+        const level = Math.floor(Math.sqrt(totalBlocked / 5)) + 1;
+        const currentLevelXp = (level - 1) * (level - 1) * 5;
+        const nextLevelXp = level * level * 5;
+        const progress = totalBlocked - currentLevelXp;
+        const needed = nextLevelXp - currentLevelXp;
+
+        return {
+            level: level,
+            progress: progress,
+            needed: needed,
+            percent: Math.min((progress / needed) * 100, 100)
+        };
+    }
+
+    const badges = [
+        { id: 'first_blood', name: 'İlk Kan', icon: '🩸', threshold: 1 },
+        { id: 'novice', name: 'Çaylak', icon: '🛡️', threshold: 50 },
+        { id: 'guardian', name: 'Muhafız', icon: '⚔️', threshold: 250 },
+        { id: 'master', name: 'Usta', icon: '🧿', threshold: 1000 },
+        { id: 'legend', name: 'Efsane', icon: '👑', threshold: 5000 },
+        { id: 'zen', name: 'Zen', icon: '🧘', threshold: 10000 },
+        { id: 'immortal', name: 'Ölümsüz', icon: '☠️', threshold: 50000 },
+        { id: 'the_one', name: 'Seçilmiş', icon: '🌌', threshold: 100000 }
+    ];
+
+    function updateStatsUI(totalBlocked) {
+        // Level & XP
+        const stats = calculateLevel(totalBlocked);
+        const levelTitle = document.getElementById('levelTitle');
+        const levelProgressText = document.getElementById('levelProgressText');
+        const xpFill = document.getElementById('xpFill');
+
+        if (levelTitle) levelTitle.textContent = `Seviye ${stats.level}: ${getLevelName(stats.level)}`;
+        if (levelProgressText) levelProgressText.textContent = `${stats.progress}/${stats.needed} XP`;
+        if (xpFill) xpFill.style.width = `${stats.percent}%`;
+
+        // Badges
+        const badgeGrid = document.getElementById('badgeGrid');
+        if (badgeGrid) {
+            badgeGrid.innerHTML = '';
+            badges.forEach(badge => {
+                const isUnlocked = totalBlocked >= badge.threshold;
+                const div = document.createElement('div');
+                div.className = `badge ${isUnlocked ? 'unlocked' : ''}`;
+                div.title = isUnlocked ? `Kazanıldı: ${badge.threshold} Engelleme` : `Hedef: ${badge.threshold} Engelleme`;
+                div.innerHTML = `
+                    <span class="badge-icon">${badge.icon}</span>
+                    <span class="badge-name">${badge.name}</span>
+                `;
+                badgeGrid.appendChild(div);
+            });
+        }
+    }
+
+    function getLevelName(level) {
+        if (level < 5) return "Çaylak";
+        if (level < 10) return "Koruyucu";
+        if (level < 20) return "Şövalye";
+        if (level < 40) return "Komutan";
+        if (level < 60) return "General";
+        if (level < 80) return "Lord";
+        return "İlah";
+    }
+
+    // Call this inside the chrome.storage.local.get callback
+    // We'll hook this up by modifying the main init function below
+
 
     function addItem(storageKey, inputElement, listElement) {
         const value = inputElement.value.trim().toLowerCase();

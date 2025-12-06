@@ -47,12 +47,17 @@
         <label class="radio-label">
           <input type="radio" name="blockMode" value="hide" checked>
           <span class="radio-custom"></span>
-          Gizle (Yok Et)
+          Gizle
         </label>
         <label class="radio-label">
           <input type="radio" name="blockMode" value="blur">
           <span class="radio-custom"></span>
           Bulanıklaştır
+        </label>
+        <label class="radio-label">
+          <input type="radio" name="blockMode" value="ghost">
+          <span class="radio-custom"></span>
+          Hayalet Mod
         </label>
       </div>
     </div>
@@ -60,7 +65,8 @@
     <!-- Tabs -->
     <div class="tabs">
       <button class="tab-btn active" data-tab="keywords">Kelimeler</button>
-      <button class="tab-btn" data-tab="urls">Siteler/Linkler</button>
+      <button class="tab-btn" data-tab="urls">Linkler</button>
+      <button class="tab-btn" data-tab="stats">İstatistik</button>
     </div>
 
     <!-- Tab Content: Keywords -->
@@ -79,6 +85,24 @@
         <button id="addUrlBtn">+</button>
       </div>
       <ul id="urlList" class="list"></ul>
+    </div>
+
+    <!-- Tab Content: Stats (New) -->
+    <div id="stats-tab" class="tab-content">
+      <div class="level-container">
+        <div class="level-header">
+          <span id="levelTitle">Seviye 1: Çaylak</span>
+          <span id="levelProgressText">0/50 XP</span>
+        </div>
+        <div class="xp-bar">
+          <div class="xp-fill" id="xpFill" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <h4 style="margin: 15px 0 10px 0; color: #888; font-size: 12px; text-transform: uppercase;">Rozetler</h4>
+      <div class="badge-grid" id="badgeGrid">
+        <!-- Badges will be injected here -->
+      </div>
     </div>
 
   </div>

@@ -352,11 +352,11 @@ function hideElement(element) {
 
     if (!alreadyBlocked && !isRevealed) {
         bestContainer.setAttribute('data-blocked-reason', 'jahrein-blocker');
-        bestContainer.style.position = 'relative'; // Ensure overlay works
 
         try { chrome.runtime.sendMessage({ action: "updateCounter", count: 1 }); } catch (e) { }
 
         if (blockMode === 'blur') {
+            bestContainer.style.position = 'relative';
             bestContainer.classList.add('jahrein-blurred');
             bestContainer.onclick = function (e) {
                 e.preventDefault();
@@ -367,7 +367,45 @@ function hideElement(element) {
                     this.onclick = null;
                 }
             };
+        } else if (blockMode === 'ghost') {
+            // Ghost Mode: Remove completely and clean up parents
+            const parent = bestContainer.parentElement;
+
+            // Check if removing this element might break the layout (especially valid for Twitter)
+            // If the element is a direct child of a critical container, we might want to just hide it instead of removing
+            const isCriticalContainer = parent && (
+                parent.getAttribute('data-testid') === 'cellInnerDiv' ||
+                parent.classList.contains('ytd-rich-grid-row')
+            );
+
+            if (isCriticalContainer) {
+                bestContainer.style.display = 'none'; // Fallback to safe hide for critical containers
+            } else {
+                bestContainer.remove();
+
+                // Clean up empty parents SAFELY
+                // Don't delete if parent is a major layout element
+                let currentParent = parent;
+                for (let i = 0; i < 3; i++) {
+                    if (currentParent &&
+                        currentParent.children.length === 0 &&
+                        currentParent.textContent.trim() === '' &&
+                        currentParent.tagName !== 'BODY' &&
+                        currentParent.tagName !== 'MAIN' &&
+                        currentParent.tagName !== 'SECTION' &&
+                        currentParent.id !== 'contents' &&
+                        !currentParent.getAttribute('data-testid')
+                    ) {
+                        const grandParent = currentParent.parentElement;
+                        currentParent.remove();
+                        currentParent = grandParent;
+                    } else {
+                        break;
+                    }
+                }
+            }
         } else {
+            // Hide Mode (Default)
             bestContainer.style.display = 'none';
         }
     }
