@@ -1,7 +1,12 @@
 // Background Script for Jahrein Blocker
 
 // 1. Context Menu Handling
-chrome.runtime.onInstalled.addListener(() => {
+chrome.runtime.onInstalled.addListener((details) => {
+    // Open Onboarding Page on Install
+    if (details.reason === 'install') {
+        chrome.tabs.create({ url: 'onboarding.html' });
+    }
+
     chrome.contextMenus.create({
         id: "block-selected-text",
         title: "Bu Kelimeyi Engelle: \"%s\"",

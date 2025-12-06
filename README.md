@@ -1,6 +1,8 @@
-# Jahrein Engelleyici v2.1 🛡️
+# Jahrein Engelleyici v2.2 🛡️
 
 İnternet deneyiminizi temizleyen, **Jahrein (Ahmet Sonuç)** ve ilişkili içerikleri (Twitter/X, YouTube, Kick, Instagram) tarayıcınızdan tamamen kaldıran, gelişmiş oyunlaştırma özelliklerine sahip bir tarayıcı eklentisidir.
+
+![Version 2.2](https://img.shields.io/badge/version-2.2-blue.svg) ![Chrome](https://img.shields.io/badge/browser-chrome%20%7C%20edge%20%7C%20brave-success.svg) ![Downloads](https://img.shields.io/github/downloads/k71809722/Jahrein-Blocker/total.svg)
 
 ## 🌟 Temel Özellikler
 
@@ -32,14 +34,14 @@
 
 Bu eklenti Chrome Web Mağazası kuralları gereği (kişisel hedefli engelleme) mağazada yayınlanmamaktadır. Manuel kurulum oldukça basittir:
 
-1.  Bu sayfanın sağ tarafındaki **"Releases"** kısmına tıklayın ve en son sürümü (v2.1) seçip **"Jahrein-Blocker v2.1(zip)"** dosyasını indirin.
-2.  İndirdiğiniz ZIP dosyasını bir klasöre çıkartın.
+1.  Bu sayfanın sağ tarafındaki **"Releases"** kısmına tıklayın ve en son sürümü (v2.2) seçip **"Jahrein-Blocker v2.2.rar"** dosyasını indirin.
+2.  İndirdiğiniz RAR dosyasını bir klasöre çıkartın.
 3.  Tarayıcınızda (Chrome, Edge veya Brave) adres çubuğuna `chrome://extensions` yazıp Enter'a basın.
 4.  Sağ üst köşedeki **Geliştirici Modu (Developer Mode)** anahtarını açın.
 5.  Sol üstte çıkan **Paketlenmemiş öğe yükle (Load unpacked)** butonuna tıklayın.
 6.  Klasöre çıkardığınız `jahrein_blocker` klasörünü seçin.
 
-Tebrikler! Jahrein Engelleyici v2.1 artık aktif. 🎉
+Tebrikler! Jahrein Engelleyici v2.2 artık aktif. 🎉
 
 ## 🛠️ Nasıl Kullanılır?
 
@@ -50,4 +52,3 @@ Tebrikler! Jahrein Engelleyici v2.1 artık aktif. 🎉
 
 ## Lisans
 MIT License - Özgürce dağıtabilir, değiştirebilir ve kullanabilirsiniz.
-

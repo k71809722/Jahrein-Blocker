@@ -1,0 +1,187 @@
+/* Updated Onboarding Styles */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #121212;
+    color: #e0e0e0;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 900px;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+header {
+    margin-bottom: 50px;
+    animation: fadeIn 0.8s ease-out;
+}
+
+.logo {
+    font-size: 60px;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 36px;
+    margin: 0 0 15px 0;
+    background: linear-gradient(45deg, #ff6b6b, #fca311);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+p {
+    color: #aaa;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.steps {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    margin-bottom: 50px;
+}
+
+/* Highlight Step (Pinning) */
+.step-card.highlight {
+    background: #1e1e1e;
+    padding: 30px;
+    border-radius: 16px;
+    border: 1px solid #fca311;
+    position: relative;
+    box-shadow: 0 0 20px rgba(252, 163, 17, 0.1);
+}
+
+.step-number {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 30px;
+    background: #fca311;
+    color: #000;
+    border-radius: 50%;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    box-shadow: 0 0 15px rgba(252, 163, 17, 0.4);
+}
+
+.instruction-list {
+    text-align: left;
+    max-width: 400px;
+    margin: 20px auto 0 auto;
+    color: #ccc;
+    font-size: 16px;
+}
+
+.instruction-list li {
+    margin-bottom: 10px;
+}
+
+/* Feature Grid */
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+@media (max-width: 600px) {
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.feature-card {
+    background: #1e1e1e;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #333;
+    text-align: left;
+    transition: 0.2s;
+}
+
+.feature-card:hover {
+    background: #252525;
+    transform: translateY(-5px);
+}
+
+.feature-card .icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.feature-card h3 {
+    margin: 0 0 10px 0;
+    color: #4cc9f0;
+    font-size: 18px;
+}
+
+.feature-card p {
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Pro Tips */
+.pro-tips {
+    background: rgba(76, 201, 240, 0.1);
+    border: 1px solid #4cc9f0;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: left;
+    color: #fff;
+}
+
+.pro-tips h3 {
+    margin: 0 0 15px 0;
+    color: #4cc9f0;
+}
+
+.pro-tips ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.pro-tips li {
+    margin-bottom: 8px;
+    font-size: 15px;
+    color: #ddd;
+}
+
+footer button {
+    background: linear-gradient(45deg, #4cc9f0, #4895ef);
+    border: none;
+    padding: 15px 40px;
+    border-radius: 50px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 5px 20px rgba(76, 201, 240, 0.3);
+}
+
+footer button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 30px rgba(76, 201, 240, 0.5);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
