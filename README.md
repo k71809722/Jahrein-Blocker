@@ -2,8 +2,6 @@
 
 İnternet deneyiminizi temizleyen, **Jahrein (Ahmet Sonuç)** ve ilişkili içerikleri (Twitter/X, YouTube, Kick, Instagram) tarayıcınızdan tamamen kaldıran, gelişmiş oyunlaştırma özelliklerine sahip bir tarayıcı eklentisidir.
 
-![Version 2.1](https://img.shields.io/badge/version-2.1-blue.svg) ![Chrome](https://img.shields.io/badge/browser-chrome%20%7C%20edge%20%7C%20brave-success.svg) ![Downloads](https://img.shields.io/github/downloads/k71809722/Jahrein-Blocker/total.svg)
-
 ## 🌟 Temel Özellikler
 
 ### 1. Üç Farklı Engelleme Modu
@@ -52,3 +50,4 @@ Tebrikler! Jahrein Engelleyici v2.1 artık aktif. 🎉
 
 ## Lisans
 MIT License - Özgürce dağıtabilir, değiştirebilir ve kullanabilirsiniz.
+
