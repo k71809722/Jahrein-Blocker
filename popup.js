@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'twitter.com/jahreindota',
         'kick.com/jahrein',
         'https://www.youtube.com/@jahreinboss',
-        'instagram.com/jahrein',
+        'instagram.com/jahrein'
     ];
 
     // Load settings
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const enabled = result.enabled !== undefined ? result.enabled : true;
         const keywords = result.keywords || defaultKeywords;
         const blockedUrls = result.blockedUrls || defaultUrls;
-        const blockMode = result.blockMode || 'hide';
+        const blockMode = result.blockMode || 'blur';
         const totalBlocked = result.totalBlocked || 0;
         const dailyBlocked = result.dailyBlocked || 0;
 
@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 keywords: defaultKeywords,
                 blockedUrls: defaultUrls,
                 enabled: true,
-                blockMode: 'hide',
+                blockMode: 'blur',
                 totalBlocked: 0,
                 dailyBlocked: 0
             });
@@ -211,10 +211,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (level < 80) return "Lord";
         return "İlah";
     }
-
-    // Call this inside the chrome.storage.local.get callback
-    // We'll hook this up by modifying the main init function below
-
 
     function addItem(storageKey, inputElement, listElement) {
         const value = inputElement.value.trim().toLowerCase();

@@ -1,12 +1,12 @@
 // Basic Content Script to block keywords
 let blockedKeywords = [];
 let isEnabled = true;
-let blockMode = 'hide'; // 'hide' or 'blur'
+let blockMode = 'blur'; // 'hide', 'blur' or 'ghost'
 
 // Initialize
 chrome.storage.local.get(['enabled', 'keywords', 'blockedUrls', 'blockMode'], (result) => {
     isEnabled = result.enabled !== undefined ? result.enabled : true;
-    blockMode = result.blockMode || 'hide';
+    blockMode = result.blockMode || 'blur';
 
     // Default Keyword List
     const defaultKeywords = [
